@@ -1,0 +1,18 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<h2>Aktuální releasy</h2>
+<p class="meta">Seznam vydaných alb a EP v databázi.</p>
+
+<div style="margin-top: 20px;">
+    {% for release in releases %}
+    <div class="card">
+        <h3 style="margin-bottom: 5px;">{{ release.title }}</h3>
+        <p class="meta" style="margin-bottom: 15px;">Interpret: {{ release.artist.name }}</p>
+        <a href="{% url 'release_detail' release.pk %}">Otevřít detail →</a>
+    </div>
+    {% empty %}
+    <p>V archivu zatím nejsou žádné releasy.</p>
+    {% endfor %}
+</div>
+{% endblock %}

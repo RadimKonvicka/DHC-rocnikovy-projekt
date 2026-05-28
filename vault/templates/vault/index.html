@@ -1,0 +1,21 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<h2>DHC Records Vault</h2>
+<p class="meta">Archiv a databáze undergroundové klubové scény.</p>
+
+<div class="stats">
+    <div class="stat-item">
+        <div style="font-size: 1.5rem; font-weight: bold; color: #fff;">{{ total_artists }}</div>
+        <div class="meta">Interpreti</div>
+    </div>
+    <div class="stat-item">
+        <div style="font-size: 1.5rem; font-weight: bold; color: #fff;">{{ total_releases }}</div>
+        <div class="meta">Releasy</div>
+    </div>
+</div>
+
+<div style="margin-top: 30px;">
+    <a href="{% url 'release_list' %}" class="btn">Prohlížet archiv</a>
+</div>
+{% endblock %}
