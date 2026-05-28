@@ -1,0 +1,13 @@
+<h1>{{ release.title }}</h1>
+<p>Interpret: <strong>{{ release.artist.name }}</strong></p>
+<p>Datum vydání: {{ release.release_date }}</p>
+
+<h3>Tracklist:</h3>
+<ol>
+    {% for track in release.tracks.all %}
+        <li>{{ track.title }} ({{ track.duration }})</li>
+    {% empty %}
+        <li>Žádné tracky zatím nejsou v databázi.</li>
+    {% endfor %}
+</ol>
+<a href="{% url 'release_list' %}">Zpět na seznam</a>

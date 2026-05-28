@@ -1,0 +1,12 @@
+<h1>Seznam releasů</h1>
+<div style="display: flex; gap: 20px;">
+    {% for release in releases %}
+    <div style="border: 1px solid #ccc; padding: 10px;">
+        <h3>{{ release.title }}</h3>
+        <p>Interpret: {{ release.artist.name }}</p>
+        <a href="{% url 'release_detail' release.pk %}">Zobrazit detail</a>
+    </div>
+    {% endfor %}
+</div>
+<br>
+<a href="{% url 'index' %}">Zpět na úvod</a>
