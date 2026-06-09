@@ -1,0 +1,31 @@
+{% extends 'vault/base.html' %}
+{% block content %}
+<div style="padding: 20px 0;">
+    <a href="{% url 'index' %}" style="color: #8e8e93; font-size: 0.9rem; text-decoration: none;">← Zpět na hlavní panel</a>
+    <h2 style="margin-top: 20px; margin-bottom: 30px; color: #fff;">📋 Seznam indexovaných interpretů v DB</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+        {% for artist in artists %}
+            <div style="background: #1a1a1a; padding: 15px 20px; border-radius: 8px; border: 1px solid #252525; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    {% if artist.image_url %}
+                        <img src="{{ artist.image_url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #1DB954;">
+                    {% else %}
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: #282828; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>
+                    {% endif %}
+                    
+                    <div>
+                        <strong style="color: #fff; font-size: 1.15rem; display: block;">{{ artist.name }}</strong>
+                        {% if artist.genre %}
+                            <span style="color: #8e8e93; font-size: 0.85rem;">Žánr: {{ artist.genre }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <span style="font-size: 0.75rem; background: #292929; color: #8e8e93; padding: 4px 10px; border-radius: 4px; font-family: monospace;">ID: {{ artist.id }}</span>
+            </div>
+        {% empty %}
+            <p style="color: #8e8e93; font-style: italic;">V databázi zatím nejsou žádní interpreti. Přidej je přes administraci.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

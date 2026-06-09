@@ -1,0 +1,162 @@
+[
+{
+"model": "vault.artist",
+"pk": 1,
+"fields": {
+    "name": "The Weeknd",
+    "bio": "Kanadský zpěvák a producent, jeden z nejposlouchanějších popových a R&B umělců na světě.",
+    "genres": "Pop, R&B, Synth-pop",
+    "country": "CA"
+}
+},
+{
+"model": "vault.artist",
+"pk": 2,
+"fields": {
+    "name": "Eminem",
+    "bio": "Legendární americký rapper, producent a jedna z nejvlivnějších osobností historie hip-hopu.",
+    "genres": "Hip-Hop, Rap",
+    "country": "US"
+}
+},
+{
+"model": "vault.artist",
+"pk": 3,
+"fields": {
+    "name": "Linkin Park",
+    "bio": "Kultovní americká rocková a nu-metalová skupina, která definovala zvuk na přelomu tisíciletí.",
+    "genres": "Rock, Nu-Metal, Alternative",
+    "country": "US"
+}
+},
+{
+"model": "vault.artist",
+"pk": 4,
+"fields": {
+    "name": "Daft Punk",
+    "bio": "Legendární francouzské elektronické duo, průkopníci žánru French house a synth-popu.",
+    "genres": "Electronic, House, Funk",
+    "country": "FR"
+}
+},
+{
+"model": "vault.release",
+"pk": 1,
+"fields": {
+    "artist": 1,
+    "title": "After Hours",
+    "release_date": "2020-03-20",
+    "release_type": "ALBUM"
+}
+},
+{
+"model": "vault.release",
+"pk": 2,
+"fields": {
+    "artist": 2,
+    "title": "The Eminem Show",
+    "release_date": "2002-05-26",
+    "release_type": "ALBUM"
+}
+},
+{
+"model": "vault.release",
+"pk": 3,
+"fields": {
+    "artist": 3,
+    "title": "Meteora",
+    "release_date": "2003-03-25",
+    "release_type": "ALBUM"
+}
+},
+{
+"model": "vault.release",
+"pk": 4,
+"fields": {
+    "artist": 4,
+    "title": "Random Access Memories",
+    "release_date": "2013-05-17",
+    "release_type": "ALBUM"
+}
+},
+{
+"model": "vault.track",
+"pk": 1,
+"fields": {
+    "release": 1,
+    "title": "Blinding Lights",
+    "duration": "00:03:20",
+    "track_number": 1
+}
+},
+{
+"model": "vault.track",
+"pk": 2,
+"fields": {
+    "release": 1,
+    "title": "Save Your Tears",
+    "duration": "00:03:35",
+    "track_number": 2
+}
+},
+{
+"model": "vault.track",
+"pk": 3,
+"fields": {
+    "release": 2,
+    "title": "Without Me",
+    "duration": "00:04:50",
+    "track_number": 1
+}
+},
+{
+"model": "vault.track",
+"pk": 4,
+"fields": {
+    "release": 2,
+    "title": "'Till I Collapse",
+    "duration": "00:04:57",
+    "track_number": 2
+}
+},
+{
+"model": "vault.track",
+"pk": 5,
+"fields": {
+    "release": 3,
+    "title": "Numb",
+    "duration": "00:03:07",
+    "track_number": 1
+}
+},
+{
+"model": "vault.track",
+"pk": 6,
+"fields": {
+    "release": 3,
+    "title": "Faint",
+    "duration": "00:02:42",
+    "track_number": 2
+}
+},
+{
+"model": "vault.track",
+"pk": 7,
+"fields": {
+    "release": 4,
+    "title": "Get Lucky",
+    "duration": "00:06:09",
+    "track_number": 1
+}
+},
+{
+"model": "vault.track",
+"pk": 8,
+"fields": {
+    "release": 4,
+    "title": "Instant Crush",
+    "duration": "00:05:37",
+    "track_number": 2
+}
+}
+]

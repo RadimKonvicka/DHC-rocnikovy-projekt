@@ -1,0 +1,23 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'release_list' %}" class="meta">← Zpět na seznam</a>
+</div>
+
+<h2>{{ release.title }}</h2>
+<p class="meta" style="margin-bottom: 5px;">Interpret: <strong style="color: #fff;">{{ release.artist.name }}</strong></p>
+<p class="meta">Datum vydání: {{ release.release_date|date:"d. m. Y" }}</p>
+
+<h3 style="margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #292929; padding-bottom: 10px;">Tracklist</h3>
+<ul class="track-list">
+    {% for track in release.tracks.all %}
+    <li class="track-item">
+        <span>{{ forloop.counter }}. {{ track.title }}</span>
+        <span class="meta">{{ track.duration }}</span>
+    </li>
+    {% empty %}
+    <li class="meta">K tomuto releasu zatím nebyly přidány žádné tracky.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

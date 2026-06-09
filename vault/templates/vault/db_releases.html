@@ -1,0 +1,37 @@
+{% extends 'vault/base.html' %}
+{% block content %}
+<div style="padding: 20px 0;">
+    <a href="{% url 'index' %}" style="color: #8e8e93; font-size: 0.9rem; text-decoration: none;">← Zpět na hlavní panel</a>
+    <h2 style="margin-top: 20px; margin-bottom: 30px; color: #fff;">💿 Alba uložená v lokálním úložišti</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+        {% for release in releases %}
+            <div style="background: #1a1a1a; padding: 15px 20px; border-radius: 8px; border: 1px solid #252525; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    {% if release.image_url %}
+                        <img src="{{ release.image_url }}" style="width: 55px; height: 55px; border-radius: 6px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                    {% else %}
+                        <div style="width: 55px; height: 55px; border-radius: 6px; background: #282828; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">💿</div>
+                    {% endif %}
+                    
+                    <div>
+                        <strong style="color: #fff; font-size: 1.15rem; display: block;">{{ release.title }}</strong>
+                        <span style="color: #1DB954; font-size: 0.9rem;">{{ release.artist.name }}</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    {% if release.release_year %}
+                        <span style="color: #8e8e93; font-size: 0.9rem; font-family: monospace;">{{ release.release_year }}</span>
+                    {% endif %}
+                    <span style="background: #ff3b30; color: #fff; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">
+                        {{ release.release_type|default:"ALBUM" }}
+                    </span>
+                </div>
+            </div>
+        {% empty %}
+            <p style="color: #8e8e93; font-style: italic;">V databázi zatím nejsou žádná alba. Přidej je přes administraci.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

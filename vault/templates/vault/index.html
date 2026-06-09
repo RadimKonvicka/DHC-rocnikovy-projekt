@@ -1,0 +1,150 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<style>
+    .bar { background: #1DB954; bottom: 1px; height: 3px; position: absolute; width: 3px; animation: sound 0ms -800ms linear infinite alternate; }
+    @keyframes sound { 0% { height: 3px; opacity: .35; } 100% { height: 28px; opacity: 1; } }
+    .bar:nth-child(1)  { left: 1px; animation-duration: 474ms; } .bar:nth-child(2)  { left: 5px; animation-duration: 433ms; }
+    .bar:nth-child(3)  { left: 9px; animation-duration: 407ms; } .bar:nth-child(4)  { left: 13px; animation-duration: 458ms; }
+    .bar:nth-child(5)  { left: 17px; animation-duration: 400ms; }
+    .stat-card:hover { transform: translateY(-3px); border-color: #1DB954 !important; transition: all 0.2s ease; }
+</style>
+
+<div style="display: grid; grid-template-columns: 280px 1fr 280px; gap: 30px; margin-top: 20px; width: 100%; max-width: 100%;">
+    
+    <aside style="border-right: 1px solid #292929; padding-right: 20px; display: flex; flex-direction: column; justify-content: space-between; height: calc(100vh - 120px);">
+        <div>
+            <h4 style="color: #8e8e93; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 20px;">Navigační centrum</h4>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                <li><a href="{% url 'index' %}" style="color: #1DB954; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 10px;">🏠 Hlavní panel</a></li>
+                <li><a href="{% url 'release_list' %}" style="color: #aaa; text-decoration: none; display: flex; align-items: center; gap: 10px;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#aaa'">💿 Globální hudební archiv</a></li>
+                <li><a href="/admin/" target="_blank" style="color: #aaa; text-decoration: none; display: flex; align-items: center; gap: 10px;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#aaa'">🔒 Interní administrace</a></li>
+            </ul>
+        </div>
+
+        {% if spotify_user %}
+        <div style="border-top: 1px solid #292929; padding-top: 20px; margin-bottom: 20px;">
+            <a href="{% url 'spotify_logout' %}" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: #251616; border: 1px solid #3a2222; color: #ff453a; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem;" onmouseover="this.style.background='#3a1a1a'" onmouseout="this.style.background='#251616'">
+                🚪 Odpojit účet Spotify
+            </a>
+        </div>
+        {% endif %}
+    </aside>
+
+    <main style="width: 100%;">
+        {% if spotify_user %}
+            <div style="background: linear-gradient(135deg, #121212 0%, #1c1c1c 100%); border: 1px solid #292929; padding: 25px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    {% if spotify_user.images %}
+                        <img src="{{ spotify_user.images.0.url }}" style="width: 65px; height: 65px; border-radius: 50%; border: 3px solid #1DB954; box-shadow: 0 0 15px rgba(29,185,84,0.4);">
+                    {% endif %}
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.6rem; color: #fff;">Vítejte zpět, {{ spotify_user.display_name }}!</h2>
+                        <p class="meta" style="margin: 5px 0 0 0; color: #8e8e93;">Profil synchronizován. API naslouchá v reálném čase.</p>
+                    </div>
+                </div>
+                
+                <div style="position: relative; width: 22px; height: 28px; margin-right: 15px;">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+
+            <div class="stat-card" style="background: #1e1e1e; border: 1px solid #292929; border-left: 5px solid #1DB954; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;">Korelace hudebního vkusu</h3>
+                        {% if dhc_match > 0 %}
+                            <p class="meta" style="margin: 0;">Vynikající! Detekovali jsme přímou shodu u interpretů: <strong style="color: #1DB954;">{{ matched_artists|join:", " }}</strong>.</p>
+                        {% else %}
+                            <p class="meta" style="margin: 0;">Momentálně neposloucháš žádné interprety z našeho Vaultu. Podívej se na doporučení níže!</p>
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 2.2rem; font-weight: 900; color: #1DB954; font-family: monospace;">{{ dhc_match }}%</div>
+                </div>
+            </div>
+
+            <div style="background: #191414; border: 1px solid #ff3b30; border-radius: 10px; padding: 20px; margin-bottom: 35px;">
+                <h3 style="margin: 0 0 15px 0; color: #ff453a; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                    🎯 AI Predikce & Hudební doporučení
+                </h3>
+                {% if recommendations %}
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                        {% for rec in recommendations %}
+                            <div style="background: #121212; padding: 15px; border-radius: 6px; border: 1px solid #292929; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong style="color: #fff; font-size: 1.1rem;">{{ rec.artist }}</strong><br>
+                                    <span style="color: #ff453a; font-size: 0.85rem; font-weight: bold;">Doporučené album: {{ rec.release }}</span>
+                                </div>
+                                <span style="font-size: 0.8rem; background: #251616; color: #ff453a; padding: 4px 10px; border-radius: 12px; border: 1px solid #3a2222;">
+                                    Žánrová shoda
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="meta" style="margin: 0; font-style: italic; color: #a7a7a7;">S aplikací jsi 100% kompatibilní, nebo tvoje top žánry neodpovídají databázi.</p>
+                {% endif %}
+            </div>
+
+            <h3 style="margin-bottom: 15px; font-size: 1.2rem;">🔥 Tvůj osobní žebříček (Top Spotify Artists)</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                {% for artist in top_artists %}
+                    <div class="stat-card" style="display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 12px 18px; border-radius: 8px; border: 1px solid #252525;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="font-family: monospace; color: #555; font-weight: bold; width: 15px;">{{ forloop.counter }}</span>
+                            {% if artist.image %}
+                                <img src="{{ artist.image }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            {% endif %}
+                            <strong style="color: #fff;">{{ artist.name }}</strong>
+                            {% if artist.is_matched %}
+                                <span style="background: rgba(29,185,84,0.15); color: #1DB954; font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(29,185,84,0.3);">KATALOGOVÁ SHODA</span>
+                            {% endif %}
+                        </div>
+                        <a href="{{ artist.url }}" target="_blank" style="font-size: 0.8rem; color: #1DB954; text-decoration: none; font-weight: bold;">Profil ↗</a>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <div style="text-align: center; padding: 8px 20px; background: #121212; border: 1px solid #292929; border-radius: 12px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div style="font-size: 3.5rem; margin-bottom: 15px; margin-top: 40px;">📊</div>
+                <h2 style="font-size: 2.2rem; color: #fff; margin-bottom: 10px; font-weight: 800; letter-spacing: -0.5px;">DHC Records Analytics Vault</h2>
+                <p class="meta" style="max-width: 500px; margin: 0 auto 35px auto; font-size: 1.05rem; line-height: 1.6; color: #a7a7a7;">
+                    Pokročilý maturitní systém pro korelaci a analýzu hudebních metadat. Propojením účtu vyvoláte asynchronní mapování Spotify žánrů proti relační databázi SQLite.
+                </p>
+                <a href="{% url 'spotify_login' %}" style="background-color: #1DB954; color: #fff; padding: 15px 35px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 1.05rem; display: inline-block; box-shadow: 0 5px 20px rgba(29,185,84,0.4); transition: transform 0.2s; margin-bottom: 40px;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                    ⚡ Autentizovat přes Spotify OAuth
+                </a>
+            </div>
+        {% endif %}
+    </main>
+
+    <aside style="border-left: 1px solid #292929; padding-left: 20px;">
+        <h4 style="color: #8e8e93; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 20px;">Stav Systému</h4>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            
+            <a href="{% url 'db_artists' %}" style="text-decoration: none; color: inherit; display: block;">
+                <div class="stat-card" style="background: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #292929; cursor: pointer;">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #fff; font-family: monospace;">{{ total_artists }}</div>
+                    <div class="meta" style="font-size: 0.8rem; margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Indexovaní interpreti</span>
+                        <span style="color: #1DB954; font-weight: bold;">↗</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="{% url 'db_releases' %}" style="text-decoration: none; color: inherit; display: block;">
+                <div class="stat-card" style="background: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #292929; cursor: pointer;">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #fff; font-family: monospace;">{{ total_releases }}</div>
+                    <div class="meta" style="font-size: 0.8rem; margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Alba v lokálním úložišti</span>
+                        <span style="color: #1DB954; font-weight: bold;">↗</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </aside>
+
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'index' %}" class="meta" style="text-decoration: none; color: #8e8e93;">← Zpět na hlavní panel</a>
+</div>
+
+<h2>Tvůj hudební profil ze Spotify</h2>
+<p class="meta">Tohle jsou tvoje aktuálně nejvíc rotované skladby a jejich ukázky:</p>
+
+<div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+    {% for track in top_tracks %}
+    <div style="background: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #292929; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            {% if track.cover_url %}
+                <img src="{{ track.cover_url }}" style="width: 60px; height: 60px; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+            {% else %}
+                <div style="width: 60px; height: 60px; background: #333; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #666;">🎵</div>
+            {% endif %}
+            <div>
+                <strong style="font-size: 1.1rem; color: #fff;">{{ track.name }}</strong><br>
+                <span class="meta" style="color: #8e8e93;">{{ track.artist }}</span>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+            {% if track.preview_url %}
+                <audio controls controlsList="nodownload" style="height: 32px; width: 220px;">
+                    <source src="{{ track.preview_url }}" type="audio/mpeg">
+                    Tvůj prohlížeč nepodporuje přehrávání audia.
+                </audio>
+            {% else %}
+                <span style="font-size: 0.8rem; color: #ff3b30; background: #251616; padding: 4px 8px; border-radius: 4px;">Ukázka nedostupná</span>
+            {% endif %}
+            <a href="{{ track.url }}" target="_blank" style="font-size: 0.8rem; color: #1DB954; text-decoration: none;">Otevřít na Spotify ↗</a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

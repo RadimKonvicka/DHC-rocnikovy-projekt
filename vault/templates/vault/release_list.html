@@ -1,0 +1,83 @@
+{% extends 'vault/base.html' %}
+
+{% block content %}
+<div style="padding: 20px 0; width: 100%;">
+    
+    <a href="{% url 'index' %}" style="color: #8e8e93; font-size: 0.9rem; text-decoration: none;">← Zpět na hlavní panel</a>
+    
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; margin-bottom: 5px;">
+        <div style="width: 15px; height: 15px; background: #1DB954; border-radius: 50%; box-shadow: 0 0 10px #1DB954;"></div>
+        <h2 style="margin: 0; color: #fff; font-size: 1.8rem;">Real-time Global Releases <span style="font-size: 0.8rem; background: #292929; color: #8e8e93; padding: 4px 8px; border-radius: 4px; margin-left: 10px;">Živě ze Spotify API</span></h2>
+    </div>
+    
+    <p style="color: #8e8e93; font-size: 0.95rem; margin-top: 5px; margin-bottom: 25px;">Aktuálně nejnovější vydaná alba a singly ve světě, která právě teď dropnula:</p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+        {% for sp_release in spotify_releases %}
+            <div style="background: #121212; padding: 12px 20px; border-radius: 6px; border: 1px solid #1DB954; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    {% if sp_release.images.0.url %}
+                        <img src="{{ sp_release.images.0.url }}" style="width: 45px; height: 45px; border-radius: 4px; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 45px; height: 45px; border-radius: 4px; background: #282828; display: flex; align-items: center; justify-content: center;">🎵</div>
+                    {% endif %}
+                    <div>
+                        <strong style="color: #fff; font-size: 1.05rem;">{{ sp_release.name }}</strong>
+                        <span style="color: #1DB954; font-size: 0.9rem; margin-left: 8px;">
+                            {% for artist in sp_release.artists %}{{ artist.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        </span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #292929; color: #8e8e93; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; text-transform: uppercase;">{{ sp_release.release_type }}</span>
+                    <span style="color: #555; font-family: monospace; font-size: 0.85rem;">{{ sp_release.release_date }}</span>
+                </div>
+            </div>
+        {% empty %}
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 40px;">
+        <h3 style="color: #fff; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            💿 Doporučená klasika z našeho lokálního Vaultu
+        </h3>
+        <p style="color: #8e8e93; font-size: 0.9rem; margin-bottom: 20px;">Stálá alba bezpečně uložená v naší školní databázi:</p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for release in releases %}
+                <a href="{% url 'release_detail' release.pk %}" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="stat-card" style="background: #1a1a1a; padding: 15px 20px; border-radius: 8px; border: 1px solid #252525; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            {% if release.image_url %}
+                                <img src="{{ release.image_url }}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover;">
+                            {% else %}
+                                <div style="width: 45px; height: 45px; border-radius: 6px; background: #282828; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">💿</div>
+                            {% endif %}
+                            <div>
+                                <strong style="color: #fff; font-size: 1.1rem;">{{ release.title }}</strong>
+                                <span style="color: #8e8e93; font-size: 0.9rem; margin-left: 8px;">— {{ release.artist.name }}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="background: #ff3b30; color: #fff; font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; font-weight: bold;">{{ release.get_release_type_display|default:release.release_type }}</span>
+                            
+                            <span style="color: #8e8e93; font-family: monospace; font-size: 0.9rem;">
+                                {% if release.release_date.year %}
+                                    {{ release.release_date|date:"Y" }}
+                                {% else %}
+                                    {{ release.release_date }}
+                                {% endif %}
+                            </span>
+                            <span style="color: #1DB954; font-weight: bold;">→</span>
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <p style="color: #8e8e93; font-style: italic; padding: 10px;">V lokální databázi zatím nejsou žádná alba. Přidej je přes administraci se správným datem.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
