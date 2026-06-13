@@ -30,3 +30,7 @@ Nejdříve vytvořte a aktivujte virtuální prostředí, aby se balíčky neins
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
+
+py manage.py makemigrations
+py manage.py migrate
+py manage.py runserver
